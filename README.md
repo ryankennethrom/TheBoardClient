@@ -2,4 +2,6 @@
 
 Notes
 
-To run the codebase locally, enter the command yarn dev in the terminal then visit localhost:3000.
+Rabbitmq integration - https://youtu.be/vMFcayVfFvM.
+Drawing canvas web application - https://youtu.be/yOjJy0L7Rt8.
+Canvas websocket integration - https://youtu.be/Dib5TYHHfgA
