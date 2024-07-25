@@ -1,3 +1,87 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+h1 {
+    font-family: sans-serif;
+    letter-spacing: 5px;
+    color: white;
+    text-align:center;
+}
+
+.pickerContainer {
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+    width: 175px;
+    margin: 10px;
+}
+.clearBtn {
+    background-color: white;
+    border: black;
+}
+
+.container {
+    background-color: #1b1b32;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+p{
+    color: white;
+    font-size: 10px;
+    margin-bottom: 50px;
+}
+
+.canvas {
+    background-color: white;
+    border-color: black;
+    border-radius: 10px;
+}
+
+.clearBtn {
+  background-color: #1b1b32;
+  border-radius: 8px;
+  border-style: none;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  height: 40px;
+  line-height: 20px;
+  list-style: none;
+  margin: 10px;
+  outline: none;
+  padding: 10px 16px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transition: color 100ms;
+  vertical-align: baseline;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.clearBtn:hover,
+.clearBtn:focus {
+  background-color: #2a2a40;
+}

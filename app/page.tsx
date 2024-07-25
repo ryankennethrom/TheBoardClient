@@ -2,11 +2,13 @@
 
 import { FC, useEffect, useState } from 'react'
 import { useDraw } from '../hooks/useDraw'
-import { ChromePicker } from 'react-color'
+import { ChromePicker, CirclePicker, HuePicker, SliderPicker } from 'react-color'
 import { io } from 'socket.io-client'
 import { drawLine } from '@/utils/drawLine'
+import './globals.css';
+import rgbHex from "rgb-hex";
 
-const socket = io('https://the-board-server.vercel.app/')
+const socket = io('http://localhost:3001')
 
 interface pageProps {}
 
@@ -17,7 +19,7 @@ type DrawLineProps = {
 }
 
 const Page: FC<pageProps> = ({}) => {
-  const [color, setColor] = useState<string>('#000')
+  const [color, setColor] = useState<string>("#0a0a23")
   const { canvasRef, onMouseDown, clear } = useDraw(createLine)
 
   useEffect(() => {
@@ -61,18 +63,19 @@ const Page: FC<pageProps> = ({}) => {
 
 
   return (
-  <div className='w-screen h-screen bg-white flex justify-center items-center'>
-    <div className='flex flex-col gap-10 pr-10'>
-      <ChromePicker color={color} onChange={(e)=> setColor(e.hex)}/>
-      <button type='button' className='p-2 rounded-md border border-black' onClick={()=> socket.emit('clear')}>Clear canvas</button>
-    </div>
-    <canvas 
-    onMouseDown={onMouseDown}
-    ref= {canvasRef}
-    width = {750}
-    height = {750}
-    className = 'border border-black rounded-md'/>
-  </div>)
+        <div className='container'>
+          <h1>The Board</h1>
+          <p><i>A whiteboard for everyone</i></p>
+          <canvas 
+              onMouseDown={onMouseDown}
+              ref= {canvasRef}
+              width = {750}
+              height = {750}
+              className = 'canvas'/>
+          <div className="pickerContainer">
+          <CirclePicker colors={["#0a0a23", "#1b1b32", "#2a2a40", "#3b3b4f"]} color={color} onChange={(e)=> setColor(e.hex)}></CirclePicker>
+          </div>
+        </div>)
 }
 
 export default Page
