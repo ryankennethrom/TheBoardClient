@@ -66,7 +66,7 @@ const Page: FC<pageProps> = ({}) => {
 
   function createLine({prevPoint, currentPoint, ctx}: Draw){
     socket.emit('draw-line', ({prevPoint, currentPoint, color}))
-    // drawLine({prevPoint, currentPoint, ctx, color})
+    drawLine({prevPoint, currentPoint, ctx, color})
   }
 
 
