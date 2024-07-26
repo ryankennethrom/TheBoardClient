@@ -27,19 +27,27 @@ const Page: FC<pageProps> = ({}) => {
 
     socket.emit('client-ready')
 
-    socket.on('get-canvas-state', () => {
-      if(!canvasRef.current?.toDataURL()) return
-      socket.emit('canvas-state', canvasRef.current.toDataURL())
-    })
+    // socket.on('get-canvas-state', () => {
+    //   if(!canvasRef.current?.toDataURL()) return
+    //   socket.emit('canvas-state', canvasRef.current.toDataURL())
+    // })
 
-    socket.on('canvas-state-from-server', (state: string) => {
-      console.log("I received the state")
+    socket.on("canvas-update", (base64img) => {
       const img = new Image()
-      img.src = state
+      img.src = base64img
       img.onload = () => {
         ctx?.drawImage(img, 0, 0)
       }
     })
+
+    // socket.on('canvas-state-from-server', (state: string) => {
+    //   console.log("I received the state")
+    //   const img = new Image()
+    //   img.src = state
+    //   img.onload = () => {
+    //     ctx?.drawImage(img, 0, 0)
+    //   }
+    // })
 
     socket.on('draw-line', ({prevPoint, currentPoint, color}: DrawLineProps) => {
       if(!ctx) return
@@ -73,7 +81,7 @@ const Page: FC<pageProps> = ({}) => {
               height = {750}
               className = 'canvas'/>
           <div className="pickerContainer">
-          <CirclePicker colors={["#0a0a23", "#1b1b32", "#2a2a40", "#3b3b4f"]} color={color} onChange={(e)=> setColor(e.hex)}></CirclePicker>
+          <CirclePicker colors={["#0a0a23", "#1b1b32", "#2a2a40", "#3b3b4f", "#ffffff"]} color={color} onChange={(e)=> setColor(e.hex)}></CirclePicker>
           </div>
         </div>)
 }

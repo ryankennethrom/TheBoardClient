@@ -21,10 +21,10 @@ h1 {
 }
 
 .pickerContainer {
-    background-color: white;
+    background-color: #d0d0d5;
     padding: 10px;
     border-radius: 5px;
-    width: 175px;
+    width: 220px;
     margin: 10px;
 }
 .clearBtn {
