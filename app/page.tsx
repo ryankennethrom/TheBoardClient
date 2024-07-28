@@ -8,6 +8,7 @@ import { drawLine } from '@/utils/drawLine'
 import './globals.css';
 import rgbHex from "rgb-hex";
 
+// const socket = io('https://theboardserver-1.onrender.com')
 const socket = io('https://theboardserver-1.onrender.com')
 
 interface pageProps {}
@@ -21,11 +22,16 @@ type DrawLineProps = {
 const Page: FC<pageProps> = ({}) => {
   const [color, setColor] = useState<string>("#0a0a23")
   const { canvasRef, onMouseDown, clear } = useDraw(createLine)
+  const [loading, setLoading ] = useState<boolean>(true);
 
   useEffect(() => {
     const ctx = canvasRef.current?.getContext('2d')
 
     socket.emit('client-ready')
+
+    socket.on("server-ready",()=>{
+      setLoading(false);
+    })
 
     // socket.on('get-canvas-state', () => {
     //   if(!canvasRef.current?.toDataURL()) return
@@ -62,28 +68,34 @@ const Page: FC<pageProps> = ({}) => {
       socket.off('draw-line')
       socket.off('clear')
     }
-  },[canvasRef])
+  },[canvasRef, loading])
 
   function createLine({prevPoint, currentPoint, ctx}: Draw){
     socket.emit('draw-line', ({prevPoint, currentPoint, color}))
     drawLine({prevPoint, currentPoint, ctx, color})
   }
-
-
+  
   return (
-        <div className='container'>
-          <h1>The Board</h1>
-          <p><i>A whiteboard for everyone</i></p>
-          <canvas 
-              onMouseDown={onMouseDown}
-              ref= {canvasRef}
-              width = {750}
-              height = {750}
-              className = 'canvas'/>
-          <div className="pickerContainer">
-          <CirclePicker colors={["#0a0a23", "#1b1b32", "#2a2a40", "#3b3b4f", "#ffffff"]} color={color} onChange={(e)=> setColor(e.hex)}></CirclePicker>
-          </div>
-        </div>)
+    <div className='container'>
+      {
+        loading ?
+
+        <div className="loading-text-container">
+          <div className='loader'> Please wait</div>
+        </div>
+        
+        :
+
+        <><h1>The Board</h1><p><i>A whiteboard for everyone</i></p><canvas
+            onMouseDown={onMouseDown}
+            ref={canvasRef}
+            width={750}
+            height={750}
+            className='canvas' /><div className="pickerContainer">
+              <CirclePicker colors={["#0a0a23", "#1b1b32", "#2a2a40", "#3b3b4f", "#ffffff"]} color={color} onChange={(e) => setColor(e.hex)}></CirclePicker>
+            </div></>
+      }
+      </div>)
 }
 
 export default Page
