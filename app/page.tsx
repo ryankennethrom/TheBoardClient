@@ -8,7 +8,7 @@ import { drawLine } from '@/utils/drawLine'
 import './globals.css';
 import rgbHex from "rgb-hex";
 
-const socket = io('http://localhost:3001')
+const socket = io('https://theboardserver-1.onrender.com')
 
 interface pageProps {}
 
