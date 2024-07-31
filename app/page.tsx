@@ -29,8 +29,13 @@ const Page: FC<pageProps> = ({}) => {
 
     socket.emit('client-ready')
 
-    socket.on("server-ready",()=>{
-      setLoading(false);
+    socket.on("server-ready",(base64img)=>{
+      const img = new Image()
+      img.src = base64img
+      img.onload = () => {
+        ctx?.drawImage(img, 0, 0)
+        setLoading(false);
+      }
     })
 
     // socket.on('get-canvas-state', () => {
@@ -38,13 +43,13 @@ const Page: FC<pageProps> = ({}) => {
     //   socket.emit('canvas-state', canvasRef.current.toDataURL())
     // })
 
-    socket.on("canvas-update", (base64img) => {
-      const img = new Image()
-      img.src = base64img
-      img.onload = () => {
-        ctx?.drawImage(img, 0, 0)
-      }
-    })
+    // socket.on("canvas-update", (base64img) => {
+    //   const img = new Image()
+    //   img.src = base64img
+    //   img.onload = () => {
+    //     ctx?.drawImage(img, 0, 0)
+    //   }
+    // })
 
     // socket.on('canvas-state-from-server', (state: string) => {
     //   console.log("I received the state")
