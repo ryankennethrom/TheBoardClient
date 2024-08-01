@@ -8,8 +8,11 @@ import { drawLine } from '@/utils/drawLine'
 import './globals.css';
 import rgbHex from "rgb-hex";
 
-const socket = io('https://theboardserver-1.onrender.com')
+// const socket = io('https://theboardserver-1.onrender.com')
 // const socket = io('http://localhost:3001/')
+// const socket = io('https://the-board-server.vercel.app:3001')
+const socket = io('creepy-latia-ryanorg-4db01151.koyeb.app/')
+
 
 interface pageProps {}
 
