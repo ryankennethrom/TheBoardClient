@@ -16,24 +16,25 @@ html, body {
 h1 {
     font-family: sans-serif;
     letter-spacing: 5px;
-    color: white;
+    color: #3b3b4f;
     text-align:center;
 }
 
 .pickerContainer {
     background-color: #d0d0d5;
-    padding: 10px;
-    border-radius: 5px;
-    width: 220px;
-    margin: 10px;
+    padding: 5px;
+    border-radius: 50px;
+    width: 207px;
+    margin: 50px;
 }
+
 .clearBtn {
     background-color: white;
     border: black;
 }
 
 .container {
-    background-color: #1b1b32;
+    background-color: #0a0a23;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -43,7 +44,7 @@ h1 {
 }
 
 p{
-    color: white;
+    color: #3b3b4f;
     font-size: 10px;
     margin-bottom: 50px;
 }

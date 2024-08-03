@@ -96,7 +96,7 @@ const Page: FC<pageProps> = ({}) => {
         
         :
 
-        <><h1>The Board</h1><p><i>A whiteboard for everyone</i></p><canvas
+        <><h1>The Board</h1><p></p><canvas
             onMouseDown={onMouseDown}
             ref={canvasRef}
             width={750}
