@@ -25,20 +25,22 @@ type DrawLineProps = {
 const Page: FC<pageProps> = ({}) => {
   const [color, setColor] = useState<string>("#0a0a23")
   const { canvasRef, onMouseDown, clear } = useDraw(createLine)
-  const [loading, setLoading ] = useState<boolean>(true);
+  // const [loading, setLoading ] = useState<boolean>(true);
+  const [canvasImgBase64, setCanvasImgBase64] = useState<string>('');
 
   useEffect(() => {
-    const ctx = canvasRef.current?.getContext('2d')
+    const ctx = canvasRef.current?.getContext('2d');
+
+    const img = new Image();
+    img.src = canvasImgBase64;
+    img.onload = () => {
+      ctx?.drawImage(img, 0, 0)
+    }
 
     socket.emit('client-ready')
 
     socket.on("server-ready",(base64img)=>{
-      const img = new Image()
-      img.src = base64img
-      img.onload = () => {
-        ctx?.drawImage(img, 0, 0)
-        setLoading(false);
-      }
+      setCanvasImgBase64(base64img);
     })
 
     // socket.on('get-canvas-state', () => {
@@ -76,7 +78,7 @@ const Page: FC<pageProps> = ({}) => {
       socket.off('draw-line')
       socket.off('clear')
     }
-  },[canvasRef, loading])
+  },[canvasRef, canvasImgBase64])
 
   function createLine({prevPoint, currentPoint, ctx}: Draw){
     socket.emit('draw-line', ({prevPoint, currentPoint, color}))
@@ -86,7 +88,7 @@ const Page: FC<pageProps> = ({}) => {
   return (
     <div className='container'>
       {
-        loading ?
+        canvasImgBase64 == '' ?
 
         <div className="loading-text-container">
           <div className='loader'> Please wait</div>
