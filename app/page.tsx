@@ -27,6 +27,7 @@ const Page: FC<pageProps> = ({}) => {
   const { canvasRef, onMouseDown, clear } = useDraw(createLine)
   // const [loading, setLoading ] = useState<boolean>(true);
   const [canvasImgBase64, setCanvasImgBase64] = useState<string>('');
+  const [ canvasClassName, setCanvasClassName ] = useState<string>('canvas');
 
   useEffect(() => {
     const ctx = canvasRef.current?.getContext('2d');
@@ -84,6 +85,15 @@ const Page: FC<pageProps> = ({}) => {
     socket.emit('draw-line', ({prevPoint, currentPoint, color}))
     drawLine({prevPoint, currentPoint, ctx, color})
   }
+
+  function mouseDown(){
+    setCanvasClassName('canvas downDrawingCursor');
+    onMouseDown()
+  }
+
+  function onMouseUp(){
+    setCanvasClassName('canvas')
+  }
   
   return (
     <div className='container'>
@@ -97,11 +107,12 @@ const Page: FC<pageProps> = ({}) => {
         :
 
         <><h1>The Board</h1><p></p><canvas
-            onMouseDown={onMouseDown}
+            onMouseDown={mouseDown}
+            onMouseUp={onMouseUp}
             ref={canvasRef}
             width={750}
             height={750}
-            className='canvas' /><div className="pickerContainer">
+            className={canvasClassName} /><div className="pickerContainer">
               <CirclePicker colors={["#0a0a23", "#1b1b32", "#2a2a40", "#3b3b4f", "#ffffff"]} color={color} onChange={(e) => setColor(e.hex)}></CirclePicker>
             </div></>
       }
