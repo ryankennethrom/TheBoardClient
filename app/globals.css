@@ -60,6 +60,7 @@ p{
   cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="black" stroke="%23000000" width="20px" height="20px" viewBox="0 0 10.04 10.04"><circle cx="5.02" cy="5.02" r="1"/></svg>') 10 10, auto;
 }
 
+
 .clearBtn {
   background-color: #1b1b32;
   border-radius: 8px;
@@ -124,6 +125,11 @@ p{
   
   .loader::after {
     bottom: 0;
+  }
+
+  h2 {
+    color: white;
+    font-family: helvetica, arial, sans-serif;
   }
 
   @keyframes load {
