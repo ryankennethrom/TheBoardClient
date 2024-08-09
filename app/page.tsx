@@ -121,6 +121,8 @@ const Page: FC<pageProps> = ({}) => {
             <canvas
                 onMouseDown={mouseDown}
                 onMouseUp={onMouseUp}
+                onTouchStart={mouseDown}
+                onTouchEnd={onMouseUp}
                 ref={canvasRef}
                 width={750}
                 height={750}
@@ -129,7 +131,7 @@ const Page: FC<pageProps> = ({}) => {
               <CirclePicker colors={["#0a0a23", "#1b1b32", "#2a2a40", "#3b3b4f", "#ffffff"]} color={color} onChange={(e) => setColor(e.hex)}></CirclePicker>
             </div></>
           :
-          <h2>Please use a bigger screen.</h2>
+          <h2>Please use a bigger window.</h2>
       }
       </div>)
 }
