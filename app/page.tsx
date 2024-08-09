@@ -25,7 +25,7 @@ type DrawLineProps = {
 
 const Page: FC<pageProps> = ({}) => {
   const [color, setColor] = useState<string>("#0a0a23")
-  const { canvasRef, onMouseDown, clear } = useDraw(createLine)
+  const { canvasRef, onMouseDown, onTouchDown, clear } = useDraw(createLine)
   // const [loading, setLoading ] = useState<boolean>(true);
   const [canvasImgBase64, setCanvasImgBase64] = useState<string>('');
   const [ canvasClassName, setCanvasClassName ] = useState<string>('canvas');
@@ -121,8 +121,7 @@ const Page: FC<pageProps> = ({}) => {
             <canvas
                 onMouseDown={mouseDown}
                 onMouseUp={onMouseUp}
-                onTouchStart={mouseDown}
-                onTouchEnd={onMouseUp}
+                onTouchStart={onTouchDown}
                 ref={canvasRef}
                 width={750}
                 height={750}

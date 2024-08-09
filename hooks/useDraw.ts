@@ -5,6 +5,14 @@ export const useDraw = (onDraw: ({ctx, currentPoint, prevPoint}: Draw) => void) 
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const prevPoint = useRef<null | Point>(null)
 
+    // <===== touch handling =====>
+    const [touchDown, setTouchDown] = useState(false)
+
+    const onTouchDown = () => {
+        setTouchDown(true);
+    }
+    // <===== End =====>
+
     const onMouseDown = () => { 
         setMouseDown(true);
         
@@ -48,11 +56,50 @@ export const useDraw = (onDraw: ({ctx, currentPoint, prevPoint}: Draw) => void) 
         canvasRef.current?.addEventListener('mousemove', handler)
         window.addEventListener('mouseup', mouseUpHandler)
 
+        // <===== touch handling =====>
+
+        const touchHandler = (e:TouchEvent) => {
+            if(!touchDown) return
+            const currentPoint = computeTouchInCanvas(e)
+
+            const ctx = canvasRef.current?.getContext('2d')
+            if(!ctx || !currentPoint) return
+
+            onDraw({ctx, currentPoint, prevPoint: prevPoint.current})
+            prevPoint.current = currentPoint
+        }
+
+        const computeTouchInCanvas = (e: TouchEvent) => {
+            const canvas = canvasRef.current
+            if(!canvas) return
+            const rect = canvas.getBoundingClientRect()
+            let touch = e.touches[0]
+            const x = touch.clientX - rect.left
+            const y = touch.clientY - rect.top
+            return {x, y}
+        }
+
+        const touchUpHandler = () => {
+            setTouchDown(false)
+            prevPoint.current = null;
+        }
+
+
+        canvasRef.current?.addEventListener('touchmove', touchHandler)
+        window.addEventListener('touchend', touchUpHandler)
+
+        // <===== End =====>
+
         return () => {
+            // <===== Touch Handling =====>
+            canvasRef.current?.removeEventListener('touchmove', touchHandler)
+            window.removeEventListener('touchend', touchUpHandler)
+            // <===== End =====>
+
             canvasRef.current?.removeEventListener('mousemove', handler)
             window.removeEventListener('mouseup', mouseUpHandler)
         }
     }, [onDraw])
 
-    return { canvasRef, onMouseDown, clear }
+    return { canvasRef, onMouseDown, onTouchDown, clear }
 }
