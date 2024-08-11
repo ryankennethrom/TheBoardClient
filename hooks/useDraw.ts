@@ -59,14 +59,20 @@ export const useDraw = (onDraw: ({ctx, currentPoint, prevPoint}: Draw) => void) 
         // <===== touch handling =====>
 
         const touchHandler = (e:TouchEvent) => {
-            if(!touchDown) return
-            const currentPoint = computeTouchInCanvas(e)
+            if (e.touches.length > 1) {
+                return
+            } else {
+                e.preventDefault();
+                if(!touchDown) return
+                const currentPoint = computeTouchInCanvas(e)
 
-            const ctx = canvasRef.current?.getContext('2d')
-            if(!ctx || !currentPoint) return
+                const ctx = canvasRef.current?.getContext('2d')
+                if(!ctx || !currentPoint) return
 
-            onDraw({ctx, currentPoint, prevPoint: prevPoint.current})
-            prevPoint.current = currentPoint
+                onDraw({ctx, currentPoint, prevPoint: prevPoint.current})
+                prevPoint.current = currentPoint
+            }
+
         }
 
         const computeTouchInCanvas = (e: TouchEvent) => {
