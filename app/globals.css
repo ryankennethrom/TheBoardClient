@@ -17,18 +17,21 @@ html, body {
 h1 {
     font-family: sans-serif;
     letter-spacing: 5px;
-    color: #3b3b4f;
+    color: white;
     text-align:center;
 }
 
 .pickerContainer {
-    position:fixed;
-    background-color: #d0d0d5;
-    padding: 5px;
-    border-radius: 50px;
-    width: 207px;
-    margin: 50px;
-    bottom: 0px;
+  background-color: #d0d0d5;
+  margin-top: 50px;
+  padding: 5px;
+  border-radius: 50px;
+  width: 207px;
+  height: 35px;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .clearBtn {
@@ -56,10 +59,12 @@ p{
     background-color: white;
     border-color: black;
     border-radius: 10px;
-    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="%23000000" width="20px" height="20px" viewBox="0 0 10.04 10.04"><circle cx="5.02" cy="5.02" r="2"/></svg>') 10 10, auto;
+    cursor: crosshair;
+    /* cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="%23000000" width="20px" height="20px" viewBox="0 0 10.04 10.04"><circle cx="5.02" cy="5.02" r="2"/></svg>') 10 10, auto; */
 }
 
 .downDrawingCursor {
+  /* cursor: none; */
   cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="black" stroke="%23000000" width="20px" height="20px" viewBox="0 0 10.04 10.04"><circle cx="5.02" cy="5.02" r="1"/></svg>') 10 10, auto;
 }
 

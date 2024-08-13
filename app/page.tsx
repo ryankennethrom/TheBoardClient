@@ -103,6 +103,14 @@ const Page: FC<pageProps> = ({}) => {
   function onMouseUp(){
     setCanvasClassName('canvas')
   }
+
+  function getWindowDimensions(){
+    const { innerWidth: width, innerHeight: height } = window;
+    return {
+      width,
+      height
+    };
+  }
   
   return (
     <div className='container'>
@@ -127,7 +135,8 @@ const Page: FC<pageProps> = ({}) => {
                 height={750}
                 className={canvasClassName} />
             <div className="pickerContainer">
-              <CirclePicker colors={["#0a0a23", "#1b1b32", "#2a2a40", "#3b3b4f", "#ffffff"]} color={color} onChange={(e) => setColor(e.hex)}></CirclePicker>
+                <CirclePicker colors={["#0a0a23", "#1b1b32", "#2a2a40", "#3b3b4f", "#ffffff"]} color={color} onChange={(e) => setColor(e.hex)}></CirclePicker>
+                {/* <ChromePicker color={color} onChange={(e) => setColor(e.hex)}></ChromePicker> */}
             </div></>
           :
           <h2>Please use a bigger window.</h2>
