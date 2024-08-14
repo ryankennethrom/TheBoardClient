@@ -59,8 +59,8 @@ p{
     background-color: white;
     border-color: black;
     border-radius: 10px;
-    cursor: crosshair;
-    /* cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="%23000000" width="20px" height="20px" viewBox="0 0 10.04 10.04"><circle cx="5.02" cy="5.02" r="2"/></svg>') 10 10, auto; */
+    /* cursor: crosshair; */
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="%23000000" width="20px" height="20px" viewBox="0 0 10.04 10.04"><circle cx="5.02" cy="5.02" r="2"/></svg>') 10 10, auto;
 }
 
 .downDrawingCursor {
