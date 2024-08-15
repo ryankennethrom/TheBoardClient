@@ -131,7 +131,7 @@ const Page: FC<pageProps> = ({}) => {
                 onMouseUp={onMouseUp}
                 onTouchStart={onTouchDown}
                 ref={canvasRef}
-                width={750}
+                width={900}
                 height={750}
                 className={canvasClassName} />
             <div className="pickerContainer">
