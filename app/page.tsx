@@ -36,7 +36,7 @@ const Page: FC<pageProps> = ({}) => {
     if( width == undefined || height == undefined ){
       setScreenBigEnough(false);
     } else {
-      setScreenBigEnough(width > 800 && height > 800);
+      setScreenBigEnough(width > 480);
     }
 
     const ctx = canvasRef.current?.getContext('2d');
