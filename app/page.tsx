@@ -119,7 +119,8 @@ const Page: FC<pageProps> = ({}) => {
         canvasImgBase64 == '' || width == undefined || height == undefined ?
 
           <div className="loading-text-container">
-            <div className='loader'> Please wait</div>
+            {/* <div className='loader'> Please wait</div> */}
+            <h2>Experiencing high volume of requests. Please check back later.</h2>
           </div>
           :
           screenBigEnough?
