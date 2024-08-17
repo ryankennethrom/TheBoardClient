@@ -31,6 +31,8 @@ const Page: FC<pageProps> = ({}) => {
   const [ screenBigEnough, setScreenBigEnough ] = useState<boolean>(false);
   const { width, height } = useWindowDimensions();
   const viewCanvasRef = useRef<HTMLCanvasElement>(null);
+  const queue = useRef(new Array())
+  // var queue: { prevPoint: Point | null; currentPoint: Point; color: string }[];
 
   useEffect(() => {
     if( width == undefined || height == undefined ){
@@ -45,8 +47,10 @@ const Page: FC<pageProps> = ({}) => {
 
     const onBeforeUnload = (ev: { returnValue: string }) => {
       
-      var base64Image = controllerCanvasRef.current?.toDataURL();
-      socket.emit('draw-line', base64Image);
+      // var base64Image = controllerCanvasRef.current?.toDataURL();
+      socket.emit('draw-line', JSON.stringify(queue.current));
+      console.log(queue.current);
+      ev.returnValue = 'aad';
       return null;
     };
 
@@ -77,6 +81,7 @@ const Page: FC<pageProps> = ({}) => {
 
   function createLine({prevPoint, currentPoint, ctx : ct}: Draw){
     drawLine({prevPoint, currentPoint, ctx: ct, color})
+    queue.current.push({prevPoint, currentPoint, color})
   }
 
   function mouseDown(){
