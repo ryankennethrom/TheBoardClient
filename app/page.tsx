@@ -11,6 +11,7 @@ import rgbHex from "rgb-hex";
 
 // const socket = io('https://theboardserver-1.onrender.com')
 // const socket = io('http://localhost:3001/')
+// const socket = io('http://192.168.1.79:3001/')
 // const socket = io('https://the-board-server.vercel.app:3001')
 const socket = io('creepy-latia-ryanorg-4db01151.koyeb.app/')
 
@@ -31,7 +32,7 @@ const Page: FC<pageProps> = ({}) => {
   const [ screenBigEnough, setScreenBigEnough ] = useState<boolean>(false);
   const { width, height } = useWindowDimensions();
   const viewCanvasRef = useRef<HTMLCanvasElement>(null);
-  const queue = useRef(new Array())
+  // const queue = useRef(new Array())
   // var queue: { prevPoint: Point | null; currentPoint: Point; color: string }[];
 
   useEffect(() => {
@@ -42,15 +43,15 @@ const Page: FC<pageProps> = ({}) => {
     }
 
 
-    const ctx = viewCanvasRef.current?.getContext('2d');
+    const ctx = controllerCanvasRef.current?.getContext('2d');
     
 
     const onBeforeUnload = (ev: { returnValue: string }) => {
       
-      // var base64Image = controllerCanvasRef.current?.toDataURL();
-      socket.emit('draw-line', JSON.stringify(queue.current));
-      console.log(queue.current);
-      ev.returnValue = 'aad';
+      // // var base64Image = controllerCanvasRef.current?.toDataURL();
+      // socket.emit('draw-line', JSON.stringify(queue.current));
+      // console.log(queue.current);
+      // ev.returnValue = 'aad';
       return null;
     };
 
@@ -68,6 +69,12 @@ const Page: FC<pageProps> = ({}) => {
       setCanvasImgBase64(base64img);
     })
 
+    socket.on('draw-line', (line)=>{
+      var { prevPoint, currentPoint, color } = line;
+      if(!ctx) return
+      drawLine({prevPoint, currentPoint, color, ctx})
+    })
+
     socket.on('clear', clear)
 
     return () => {
@@ -81,7 +88,8 @@ const Page: FC<pageProps> = ({}) => {
 
   function createLine({prevPoint, currentPoint, ctx : ct}: Draw){
     drawLine({prevPoint, currentPoint, ctx: ct, color})
-    queue.current.push({prevPoint, currentPoint, color})
+    socket.emit("draw-line", {prevPoint, currentPoint, color})
+    // queue.current.push({prevPoint, currentPoint, color})
   }
 
   function mouseDown(){
