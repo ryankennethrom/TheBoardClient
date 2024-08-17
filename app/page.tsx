@@ -50,6 +50,7 @@ const Page: FC<pageProps> = ({}) => {
       // var base64Image = controllerCanvasRef.current?.toDataURL();
       socket.emit('draw-line', JSON.stringify(queue.current));
       console.log(queue.current);
+      ev.returnValue = 'aad';
       return null;
     };
 
