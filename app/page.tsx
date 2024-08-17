@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 import { useDraw } from '../hooks/useDraw'
 import { ChromePicker, CirclePicker, HuePicker, SliderPicker } from 'react-color'
 import { io } from 'socket.io-client'
@@ -25,12 +25,12 @@ type DrawLineProps = {
 
 const Page: FC<pageProps> = ({}) => {
   const [color, setColor] = useState<string>("#0a0a23")
-  const { canvasRef, onMouseDown, onTouchDown, clear } = useDraw(createLine)
-  // const [loading, setLoading ] = useState<boolean>(true);
+  const { controllerCanvasRef, onMouseDown, onTouchDown, clear } = useDraw(createLine)
   const [canvasImgBase64, setCanvasImgBase64] = useState<string>('');
-  const [ canvasClassName, setCanvasClassName ] = useState<string>('canvas');
+  const [ canvasClassName, setCanvasClassName ] = useState<string>('canvasController');
   const [ screenBigEnough, setScreenBigEnough ] = useState<boolean>(false);
   const { width, height } = useWindowDimensions();
+  const viewCanvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     if( width == undefined || height == undefined ){
@@ -39,7 +39,18 @@ const Page: FC<pageProps> = ({}) => {
       setScreenBigEnough(width > 480);
     }
 
-    const ctx = canvasRef.current?.getContext('2d');
+
+    const ctx = viewCanvasRef.current?.getContext('2d');
+    
+
+    const onBeforeUnload = (ev: { returnValue: string }) => {
+      
+      var base64Image = controllerCanvasRef.current?.toDataURL();
+      socket.emit('draw-line', base64Image);
+      return null;
+    };
+
+    window.addEventListener("beforeunload", onBeforeUnload);
 
     const img = new Image();
     img.src = canvasImgBase64;
@@ -53,56 +64,34 @@ const Page: FC<pageProps> = ({}) => {
       setCanvasImgBase64(base64img);
     })
 
-    // socket.on('get-canvas-state', () => {
-    //   if(!canvasRef.current?.toDataURL()) return
-    //   socket.emit('canvas-state', canvasRef.current.toDataURL())
-    // })
-
-    // socket.on("canvas-update", (base64img) => {
-    //   const img = new Image()
-    //   img.src = base64img
-    //   img.onload = () => {
-    //     ctx?.drawImage(img, 0, 0)
-    //   }
-    // })
-
-    // socket.on('canvas-state-from-server', (state: string) => {
-    //   console.log("I received the state")
-    //   const img = new Image()
-    //   img.src = state
-    //   img.onload = () => {
-    //     ctx?.drawImage(img, 0, 0)
-    //   }
-    // })
-
-    socket.on('draw-line', ({prevPoint, currentPoint, color}: DrawLineProps) => {
-      if(!ctx) return
-      drawLine({prevPoint, currentPoint, ctx, color})
-    })
-
     socket.on('clear', clear)
 
     return () => {
+      window.removeEventListener("beforeunload", onBeforeUnload);
       socket.off('get-canvas-state')
       socket.off('canvas-state-from-server')
       socket.off('draw-line')
       socket.off('clear')
     }
-  },[canvasRef, canvasImgBase64,screenBigEnough])
+  },[controllerCanvasRef, canvasImgBase64,screenBigEnough])
 
-  function createLine({prevPoint, currentPoint, ctx}: Draw){
-    socket.emit('draw-line', ({prevPoint, currentPoint, color}))
-    drawLine({prevPoint, currentPoint, ctx, color})
+  function createLine({prevPoint, currentPoint, ctx : ct}: Draw){
+    drawLine({prevPoint, currentPoint, ctx: ct, color})
   }
 
   function mouseDown(){
-    setCanvasClassName('canvas downDrawingCursor');
+    setCanvasClassName('canvasController downDrawingCursor');
     onMouseDown()
   }
 
   function onMouseUp(){
-    setCanvasClassName('canvas')
+    setCanvasClassName('canvasController')
   }
+
+  // function sendImageToServer(ctx: any){
+  //   var base64Image = ctx.canvas.toDataURL();
+  //   socket.emit('draw-line', base64Image);
+  // }
 
   function getWindowDimensions(){
     const { innerWidth: width, innerHeight: height } = window;
@@ -119,22 +108,29 @@ const Page: FC<pageProps> = ({}) => {
         canvasImgBase64 == '' || width == undefined || height == undefined ?
 
           <div className="loading-text-container">
-            {/* <div className='loader'> Please wait</div> */}
-            <h2>Experiencing high volume of requests. Please check back later.</h2>
+            <div className='loader'> Please wait</div>
+            {/* <h2>Experiencing high volume of requests. Please check back later.</h2> */}
           </div>
           :
           screenBigEnough?
             <>
             <h1>The Board</h1>
             <p></p>
-            <canvas
-                onMouseDown={mouseDown}
-                onMouseUp={onMouseUp}
-                onTouchStart={onTouchDown}
-                ref={canvasRef}
-                width={900}
-                height={750}
-                className={canvasClassName} />
+            <div id="wrapper">
+              <canvas
+                  onMouseDown={mouseDown}
+                  onMouseUp={onMouseUp}
+                  onTouchStart={onTouchDown}
+                  ref={controllerCanvasRef}
+                  width={900}
+                  height={750}
+                  className={canvasClassName} />
+              <canvas
+                    ref={viewCanvasRef}
+                    width={900}
+                    height={750}
+                    className={"canvasView"} />
+            </div>
             <div className="pickerContainer">
                 <CirclePicker colors={["#0a0a23", "#1b1b32", "#2a2a40", "#3b3b4f", "#ffffff"]} color={color} onChange={(e) => setColor(e.hex)}></CirclePicker>
                 {/* <ChromePicker color={color} onChange={(e) => setColor(e.hex)}></ChromePicker> */}

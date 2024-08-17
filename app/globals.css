@@ -59,12 +59,27 @@ p{
     margin-bottom: 50px;
 }
 
-.canvas {
-    background-color: white;
-    border-color: black;
-    border-radius: 10px;
-    /* cursor: crosshair; */
-    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="white" stroke="%23000000" width="20px" height="20px" viewBox="0 0 10.04 10.04"><circle cx="5.02" cy="5.02" r="2.5"/></svg>') 10 10, auto;
+#wrapper {
+  position: relative;
+  width: 900px;
+  height: 750px;
+}
+
+.canvasView, .canvasController {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  /* background-color: white; */
+  border-color: black;
+  border-radius: 10px;
+  /* cursor: crosshair; */
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="white" stroke="%23000000" width="20px" height="20px" viewBox="0 0 10.04 10.04"><circle cx="5.02" cy="5.02" r="2.5"/></svg>') 10 10, auto;
+  width: 900px;
+  height: 750px;
+}
+
+.canvasController {
+  z-index: 2;
 }
 
 .downDrawingCursor {

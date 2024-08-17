@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react"
 
 export const useDraw = (onDraw: ({ctx, currentPoint, prevPoint}: Draw) => void) => {
     const [mouseDown, setMouseDown] = useState(false)
-    const canvasRef = useRef<HTMLCanvasElement>(null)
+    const controllerCanvasRef = useRef<HTMLCanvasElement>(null)
     const prevPoint = useRef<null | Point>(null)
 
     // <===== touch handling =====>
@@ -19,12 +19,21 @@ export const useDraw = (onDraw: ({ctx, currentPoint, prevPoint}: Draw) => void) 
      }
     
     const clear = () => {
-        const canvas = canvasRef.current
+        const canvas = controllerCanvasRef.current
         if(!canvas) return
 
         const ctx = canvas.getContext('2d')
         if(!ctx) return
         ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+        // //pseudo
+        // const pseudoCanvas = pseudoCanvasRef.current
+
+        // if(!pseudoCanvas) return
+
+        // const pseudoCtx = pseudoCanvas.getContext('2d')
+        // if(!pseudoCtx) return
+        // ctx.clearRect(0, 0, pseudoCanvas.width, pseudoCanvas.height)
     }
 
     useEffect(() => {
@@ -32,15 +41,21 @@ export const useDraw = (onDraw: ({ctx, currentPoint, prevPoint}: Draw) => void) 
             if(!mouseDown) return
             const currentPoint = computePointInCanvas(e)
 
-            const ctx = canvasRef.current?.getContext('2d')
+            const ctx = controllerCanvasRef.current?.getContext('2d')
             if(!ctx || !currentPoint) return
 
             onDraw({ctx, currentPoint, prevPoint: prevPoint.current})
+
+            // // pseudo
+            // const pseudo_ctx = pseudoCanvasRef.current?.getContext('2d')
+            // if(!currentPoint || !pseudo_ctx) return
+            // onDraw({ctx: pseudo_ctx, currentPoint, prevPoint: prevPoint.current})
+
             prevPoint.current = currentPoint
         }
 
         const computePointInCanvas = (e: MouseEvent) => {
-            const canvas = canvasRef.current
+            const canvas = controllerCanvasRef.current
             if(!canvas) return
             const rect = canvas.getBoundingClientRect()
             const x = e.clientX - rect.left
@@ -53,7 +68,7 @@ export const useDraw = (onDraw: ({ctx, currentPoint, prevPoint}: Draw) => void) 
             prevPoint.current = null
         }
 
-        canvasRef.current?.addEventListener('mousemove', handler)
+        controllerCanvasRef.current?.addEventListener('mousemove', handler)
         window.addEventListener('mouseup', mouseUpHandler)
 
         // <===== touch handling =====>
@@ -66,17 +81,20 @@ export const useDraw = (onDraw: ({ctx, currentPoint, prevPoint}: Draw) => void) 
                 if(!touchDown) return
                 const currentPoint = computeTouchInCanvas(e)
 
-                const ctx = canvasRef.current?.getContext('2d')
+                const ctx = controllerCanvasRef.current?.getContext('2d')
+                // const pseudo_ctx = pseudoCanvasRef.current?.getContext('2d')
                 if(!ctx || !currentPoint) return
+                // if(!ctx || !currentPoint || !pseudo_ctx) return
 
                 onDraw({ctx, currentPoint, prevPoint: prevPoint.current})
+                // onDraw({ctx: pseudo_ctx, currentPoint, prevPoint: prevPoint.current})
                 prevPoint.current = currentPoint
             }
 
         }
 
         const computeTouchInCanvas = (e: TouchEvent) => {
-            const canvas = canvasRef.current
+            const canvas = controllerCanvasRef.current
             if(!canvas) return
             const rect = canvas.getBoundingClientRect()
             let touch = e.touches[0]
@@ -91,21 +109,21 @@ export const useDraw = (onDraw: ({ctx, currentPoint, prevPoint}: Draw) => void) 
         }
 
 
-        canvasRef.current?.addEventListener('touchmove', touchHandler)
+        controllerCanvasRef.current?.addEventListener('touchmove', touchHandler)
         window.addEventListener('touchend', touchUpHandler)
 
         // <===== End =====>
 
         return () => {
             // <===== Touch Handling =====>
-            canvasRef.current?.removeEventListener('touchmove', touchHandler)
+            controllerCanvasRef.current?.removeEventListener('touchmove', touchHandler)
             window.removeEventListener('touchend', touchUpHandler)
             // <===== End =====>
 
-            canvasRef.current?.removeEventListener('mousemove', handler)
+            controllerCanvasRef.current?.removeEventListener('mousemove', handler)
             window.removeEventListener('mouseup', mouseUpHandler)
         }
     }, [onDraw])
 
-    return { canvasRef, onMouseDown, onTouchDown, clear }
+    return { controllerCanvasRef, onMouseDown, onTouchDown, clear }
 }
