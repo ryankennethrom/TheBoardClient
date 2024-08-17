@@ -149,7 +149,7 @@ const Page: FC<pageProps> = ({}) => {
                 {/* <ChromePicker color={color} onChange={(e) => setColor(e.hex)}></ChromePicker> */}
             </div></>
           :
-          <h2>Please use a bigger window.</h2>
+          <h2>Please use desktop view.</h2>
       }
       </div>)
 }
