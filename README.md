@@ -1,7 +1,5 @@
 # TheBoard
 
-Notes
+Draw, and sketch in real time with people from around the world on this canvas to form a continuously evolving art piece.
 
-Rabbitmq integration - https://youtu.be/vMFcayVfFvM.
-Drawing canvas web application - https://youtu.be/yOjJy0L7Rt8.
-Canvas websocket integration - https://youtu.be/Dib5TYHHfgA
+Visit the website : https://the-board-client.vercel.app/
