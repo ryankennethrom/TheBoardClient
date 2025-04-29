@@ -1,4 +1,4 @@
-# TheBoard
+## About
 
 Draw, and sketch in real time with people from around the world on this canvas to form a continuously evolving art piece.
 
